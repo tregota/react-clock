@@ -5,6 +5,7 @@ import { getHours, getMinutes, getSeconds } from '@wojtekmaj/date-utils';
 
 import Hand from './Hand';
 import Mark from './Mark';
+import Icon from './Icon';
 
 
 import {
@@ -37,7 +38,37 @@ export default function Clock({
   secondHandWidth = 1,
   size = 150,
   value,
+  iconLayers = []
 }) {
+
+  function renderClock() {
+    let CurrentLayer = <React.Fragment>
+      {renderFace()}
+      {renderHourHandFn()}
+      {renderMinuteHandFn()}
+      {renderSecondHandFn()}
+    </React.Fragment>
+
+    let layerId = 0;
+    for (const layer of iconLayers) {
+      CurrentLayer = (
+        <div key={layerId++} className={`react-clock__icon__layer`} style={{ padding: layer.padding || '40px', height: '100%', width: '100%' }}>
+          <div style={{ position: 'relative', height: '100%', width: '100%' }}>
+            {CurrentLayer}
+          </div>
+          {layer.icons && layer.icons.map((iconData, iconIdx) => (
+            <Icon
+              key={iconData.id || iconIdx}
+              {...iconData}
+            />
+          ))}
+        </div>
+      )
+    }
+
+    return CurrentLayer;
+  }
+
   function renderMinuteMarksFn() {
     if (!renderMinuteMarks) {
       return null;
@@ -162,10 +193,7 @@ export default function Clock({
         height: `${size}px`,
       }}
     >
-      {renderFace()}
-      {renderHourHandFn()}
-      {renderMinuteHandFn()}
-      {renderSecondHandFn()}
+      {renderClock()}
     </time>
   );
 }
@@ -198,4 +226,5 @@ Clock.propTypes = {
     PropTypes.string,
     PropTypes.instanceOf(Date),
   ]),
+  iconLayers: PropTypes.array
 };
