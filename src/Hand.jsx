@@ -15,6 +15,7 @@ export default function Hand({
       className={`react-clock__hand react-clock__${name}-hand`}
       style={{
         transform: `rotate(${angle}deg)`,
+        ...(angle == 0 ? {transition: 'none'}: undefined) // avoid frantic spinning whenever transition is set and angle resets to zero
       }}
     >
       <div

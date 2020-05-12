@@ -5,7 +5,7 @@ import { getHours, getMinutes, getSeconds } from '@wojtekmaj/date-utils';
 
 import Hand from './Hand';
 import Mark from './Mark';
-import Icon from './Icon';
+import Symbol from './Symbol';
 
 
 import {
@@ -38,35 +38,26 @@ export default function Clock({
   secondHandWidth = 1,
   size = 150,
   value,
-  iconLayers = []
+  padding,
+  symbolLayers = []
 }) {
 
   function renderClock() {
-    let CurrentLayer = <React.Fragment>
-      {renderFace()}
-      {renderHourHandFn()}
-      {renderMinuteHandFn()}
-      {renderSecondHandFn()}
-    </React.Fragment>
-
-    let layerId = 0;
-    for (const layer of iconLayers) {
-      CurrentLayer = (
-        <div key={layerId++} className={`react-clock__icon__layer`} style={{ padding: layer.padding || '40px', height: '100%', width: '100%' }}>
-          <div style={{ position: 'relative', height: '100%', width: '100%' }}>
-            {CurrentLayer}
-          </div>
-          {layer.icons && layer.icons.map((iconData, iconIdx) => (
-            <Icon
-              key={iconData.id || iconIdx}
-              {...iconData}
-            />
-          ))}
+    return (
+      <div style={{ height: '100%', width: '100%', ...(padding ? {padding: `${padding}px`} : {}) }}>
+        <div style={{ position: 'relative', height: '100%', width: '100%' }}>   
+          {renderFace()}
+          {renderHourHandFn()}
+          {renderMinuteHandFn()}
+          {renderSecondHandFn()}
         </div>
-      )
-    }
-
-    return CurrentLayer;
+        {symbolLayers.map(({symbols, top}) => (
+          <div className={`react-clock__symbol__layer`} style={{ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0 }}>
+            {symbols?.map((symbolData, symIdx) => <Symbol key={symbolData.id || symIdx} top={top} {...symbolData} />)}
+          </div>
+        ))}
+      </div>
+    )
   }
 
   function renderMinuteMarksFn() {
@@ -226,5 +217,6 @@ Clock.propTypes = {
     PropTypes.string,
     PropTypes.instanceOf(Date),
   ]),
-  iconLayers: PropTypes.array
+  padding: PropTypes.number,
+  symbolLayers: PropTypes.array
 };

@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default function Icon({
-  icon,
+export default function Symbol({
+  symbol,
+  top,
   timestamp
 }) {
   const date = new Date(timestamp);
@@ -13,15 +14,15 @@ export default function Icon({
     ) : 0;
 
   return (
-    <div className={`react-clock__icon`} style={{ transform: `rotate(${angle}deg)` }}>
-      <div className={` react-clock__icon__body`}>
-        {icon}
+    <div className={`react-clock__symbol`} style={{ transform: `rotate(${angle}deg)` }}>
+      <div className={` react-clock__symbol__body`} style={{ top }}>
+        {symbol}
       </div>
     </div>
   );
 }
 
-Icon.propTypes = {
-  icon: PropTypes.element.isRequired,
+Symbol.propTypes = {
+  symbol: PropTypes.element.isRequired,
   timestamp: PropTypes.string.isRequired
 };
