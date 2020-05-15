@@ -51,9 +51,9 @@ export default function Clock({
           {renderMinuteHandFn()}
           {renderSecondHandFn()}
         </div>
-        {symbolLayers.map(({symbols, top}) => (
-          <div className={`react-clock__symbol__layer`} style={{ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0 }}>
-            {symbols?.map((symbolData, symIdx) => <Symbol key={symbolData.id || symIdx} top={top} {...symbolData} />)}
+        {symbolLayers.map(({symbols, top, scale}, idx) => (
+          <div key={idx} className={`react-clock__symbol__layer`} style={{ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0 }}>
+            {symbols?.map((symbolData, symIdx) => <Symbol key={symbolData.id || symIdx} top={top} scale={scale} {...symbolData} />)}
           </div>
         ))}
       </div>

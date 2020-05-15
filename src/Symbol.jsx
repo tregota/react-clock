@@ -4,14 +4,22 @@ import PropTypes from 'prop-types';
 export default function Symbol({
   symbol,
   top,
-  timestamp
+  timestamp,
+  scale = 'hour'
 }) {
   const date = new Date(timestamp);
-  const angle = date ? (
-      (date.getHours() * 30)
-      + (date.getMinutes() / 2)
-      + (date.getSeconds() / 600)
-    ) : 0;
+  const angle = date ? (scale === 'second' ? (
+    (date.getMinutes() * 360)
+    + (date.getSeconds() * 6)
+  ) : scale === 'minute' ? (
+    (date.getHours() * 360)
+    + (date.getMinutes() * 6)
+    + (date.getSeconds() / 10)
+  ) : (
+    (date.getHours() * 30)
+    + (date.getMinutes() / 2)
+    + (date.getSeconds() / 600)
+  )) : 0;
 
   return (
     <div className={`react-clock__symbol`} style={{ transform: `rotate(${angle}deg)` }}>
@@ -24,5 +32,7 @@ export default function Symbol({
 
 Symbol.propTypes = {
   symbol: PropTypes.element.isRequired,
-  timestamp: PropTypes.string.isRequired
+  timestamp: PropTypes.string.isRequired,
+  top: PropTypes.string,
+  scale: PropTypes.string
 };
